@@ -1,6 +1,7 @@
 <template>
 	<section class="generator">
 		<div class="generator__container">
+			<div class="copied" v-if="copied" :class="{copy: copied}">Copied!</div>
 			<div class="generator__table">
 				<input type="text" v-model="textInput">
 
@@ -30,7 +31,7 @@
 
 				<div class="generator__buttons">
 					<button class="btn btn-main" @click.prevent="reset">Reset</button>
-					<button class="btn btn-success">Copy</button>
+					<button class="btn btn-success" @click.prevent="copy">Copy</button>
 				</div>
 			</div>
 			<div class="generator__result">
@@ -54,20 +55,14 @@ export default {
 			translateY: 0,
 			skewX: 0,
 			skewY: 0,
-			textInput: 'Your text!'
+			textInput: 'Your text!',
+			copied: false,
 		}
 	},
 	computed: {
 		output() {
 			return {
-				transform: `
-					rotate(${this.rotate}deg)
-					scale(${this.scale})
-					translateX(${this.translateX}px)
-					translateY(${this.translateY}px)
-					skewX(${this.skewX}deg)
-					skewY(${this.skewY}deg)
-				`,
+				transform: `rotate(${this.rotate}deg) scale(${this.scale}) translateX(${this.translateX}px) translateY(${this.translateY}px) skewX(${this.skewX}deg) skewY(${this.skewY}deg)`,
 				color: `${this.textColor}`,
 				backgroundColor: `${this.bgColor}`
 			}
@@ -84,6 +79,25 @@ export default {
 			this.skewX = 0,
 			this.skewY = 0,
 			this.textInput = 'Your text!'
+		},
+		async copy() {
+			let copyText = `
+			<div class="box">${this.textInput}</div>
+
+				<style>
+					.box {
+						padding: 16px 30px;
+						transform:${this.output.transform};
+						color:${this.output.color};
+						background-color:${this.output.backgroundColor};
+					}
+				</style>
+			`
+			await navigator.clipboard.writeText(copyText)
+			this.copied = true
+			setTimeout(() => {
+				this.copied = false
+			}, 1500)
 		}
 	}
 }
@@ -115,6 +129,7 @@ input[type="color"] {
 	padding: 2.5rem 15px;
 }
 .generator__container {
+	position: relative;
 	max-width: 800px;
 	margin: 0 auto;
 	padding: 15px;
@@ -122,6 +137,30 @@ input[type="color"] {
 	background: var(--bg-second-color);
 	display: flex;
 	column-gap: 15px;
+}
+
+.copied {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	padding: 2rem;
+	border-radius: 6px;
+	background: var(--blue-color-hover);
+	z-index: 20;
+	text-transform: uppercase;
+	font-weight: 600;
+}
+.copy {
+	animation: 1.5s copyAnim linear;
+}
+@keyframes copyAnim {
+	50% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
 }
 .generator__table {
 	flex: 1 0 45%;

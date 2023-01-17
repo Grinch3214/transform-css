@@ -31,6 +31,7 @@
 html {
 	font-size: 14px;
 	line-height: 1;
+	height: -webkit-fill-available;
 }
 
 body {
@@ -40,6 +41,7 @@ body {
 	font-family: Montserrat;
 	font-weight: 400;
 	font-size: 1rem;
+	height: -webkit-fill-available;
 }
 
 label {
