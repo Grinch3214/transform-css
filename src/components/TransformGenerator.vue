@@ -35,8 +35,10 @@
 				</div>
 			</div>
 			<div class="generator__result">
-				<div class="generator__output" :style="output">
+				<div class="generator__border">
+					<div class="generator__output" :style="output">
 					{{ textInput }}
+				</div>
 				</div>
 			</div>
 		</div>
@@ -136,7 +138,8 @@ input[type="color"] {
 	border-radius: 6px;
 	background: var(--bg-second-color);
 	display: flex;
-	column-gap: 15px;
+	flex-flow: column-reverse;
+	row-gap: 15px;
 }
 
 .copied {
@@ -176,6 +179,13 @@ input[type="color"] {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	min-height: 250px;
+}
+
+.generator__border {
+	padding: 0.5rem;
+	border: 1px solid #3344c1;
+	border-radius: 6px;
 }
 .generator__output {
 	padding: 0.8rem 1.5rem;
@@ -188,5 +198,12 @@ input[type="color"] {
 	display: flex;
 	gap: 15px;
 	justify-content: flex-end;
+}
+
+@media screen and (min-width: 768px) {
+	.generator__container {
+		flex-flow: row;
+		column-gap: 15px;
+	}
 }
 </style>
